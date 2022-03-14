@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 
 public interface CreditServiceInterface {
 
-    void addCredit(Credit credit);
+    Mono<Credit> addCredit(Credit credit);
 
     Mono<Credit> findCreditById(Integer id);
 
@@ -15,4 +15,6 @@ public interface CreditServiceInterface {
     Mono<Credit> updateCredit(Credit credit);
 
     Mono<Void> deleteCredit(Integer id);
+
+    Mono<Credit> findCreditByIdClient(Integer id);
 }

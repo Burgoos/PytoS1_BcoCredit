@@ -25,7 +25,9 @@ public class CreditController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void addCredit(@RequestBody Credit credit){
-        creditServiceImpl.addCredit(credit);
+        creditServiceImpl.findCreditByIdClient(credit.getIdClient()).switchIfEmpty(
+                creditServiceImpl.addCredit(credit)
+        );
     }
 
     @GetMapping

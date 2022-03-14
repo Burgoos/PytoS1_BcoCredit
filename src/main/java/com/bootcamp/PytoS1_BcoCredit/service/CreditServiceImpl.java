@@ -14,8 +14,9 @@ public class CreditServiceImpl implements CreditServiceInterface{
     CreditRepository creditRepository;
 
     @Override
-    public void addCredit(Credit credit) {
+    public Mono<Credit> addCredit(Credit credit) {
         creditRepository.save(credit).subscribe();
+        return Mono.just(credit);
     }
 
     @Override
@@ -36,5 +37,10 @@ public class CreditServiceImpl implements CreditServiceInterface{
     @Override
     public Mono<Void> deleteCredit(Integer id) {
         return creditRepository.deleteById(id);
+    }
+
+    @Override
+    public Mono<Credit> findCreditByIdClient(Integer id) {
+         return creditRepository.findByIdClient(id);
     }
 }
