@@ -2,7 +2,9 @@ package com.bootcamp.PytoS1_BcoCredit.controller;
 
 import com.bootcamp.PytoS1_BcoCredit.model.Consumption;
 import com.bootcamp.PytoS1_BcoCredit.model.CreditCard;
+import com.bootcamp.PytoS1_BcoCredit.model.Payment;
 import com.bootcamp.PytoS1_BcoCredit.request.ConsumptionRequest;
+import com.bootcamp.PytoS1_BcoCredit.request.PaymentRequest;
 import com.bootcamp.PytoS1_BcoCredit.service.CreditCardServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,33 @@ public class CreditCardController {
     @ResponseStatus(HttpStatus.OK)
     public  Mono<CreditCard> update (@RequestBody CreditCard creditCard){
         return  creditCardService.updateCreditCard(creditCard);
+    }
+
+    @PutMapping("/payment")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<CreditCard> addPayment(@RequestBody PaymentRequest paymentRequest){
+        try {
+            Mono<CreditCard> creditCard = creditCardService.findCreditCardById(paymentRequest.getIdCredit());
+            creditCard.flatMap(
+                creditCardResult -> {
+                    Payment payment = new Payment();
+                    payment.setAmount(paymentRequest.getAmount());
+                    payment.setDatePay(paymentRequest.getDatePay());
+                    if (creditCardResult.getPayments() != null){
+                        creditCardResult.getPayments().add(payment);
+                    }else {
+                        ArrayList<Payment> paymentArrayList = new ArrayList<>();
+                        paymentArrayList.add(payment);
+                        creditCardResult.setPayments(paymentArrayList);
+                    }
+                    return  creditCardService.updateCreditCard(creditCardResult);
+                }
+            ).subscribe();
+            return creditCard;
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return null;
     }
 
     @PutMapping("/consumption")

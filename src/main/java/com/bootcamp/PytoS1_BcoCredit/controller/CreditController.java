@@ -48,7 +48,7 @@ public class CreditController {
 
     @PutMapping("/payment")
     @ResponseStatus(HttpStatus.OK)
-    public  Mono<Credit> updatePayment(@RequestBody PaymentRequest paymentRequest){
+    public Mono<Credit> addPayment(@RequestBody PaymentRequest paymentRequest){
         try {
             Mono<Credit> credit = creditServiceImpl.findCreditById(paymentRequest.getIdCredit());
             credit.flatMap(
