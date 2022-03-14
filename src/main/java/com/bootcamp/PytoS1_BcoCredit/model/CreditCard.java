@@ -30,5 +30,6 @@ public class CreditCard {
     private int cutoffDate;
     private int limitDate;
     private List<Payment> payments;
+    private List<Consumption> consumptions;
 
 }

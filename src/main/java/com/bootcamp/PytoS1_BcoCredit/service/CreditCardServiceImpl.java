@@ -15,7 +15,7 @@ public class CreditCardServiceImpl implements CreditCardServiceInterface{
 
     @Override
     public void addCreditCard(CreditCard creditCard) {
-        creditCardRepository.save(creditCard);
+        creditCardRepository.save(creditCard).subscribe();
     }
 
     @Override

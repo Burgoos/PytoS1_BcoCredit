@@ -68,10 +68,11 @@ public class CreditController {
             ).subscribe();
             return credit;
         }catch (Exception e){
-            log.info(e.getMessage());
+            log.error(e.getMessage());
         }
         return null;
     }
+
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public  void  delete(@PathVariable("id") Integer id){
