@@ -63,6 +63,8 @@ public class CreditController {
                             paymentArrayList.add(payment);
                             creditResult.setPayments(paymentArrayList);
                         }
+                        creditResult.setAmountPaid(creditResult.getAmountPaid().add(paymentRequest.getAmount()));
+                        creditResult.setFeesPaid(creditResult.getFeesPaid() + 1);
                         return creditServiceImpl.updateCredit(creditResult);
                     }
             ).subscribe();

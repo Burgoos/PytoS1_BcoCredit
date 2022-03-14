@@ -66,6 +66,7 @@ public class CreditCardController {
                         paymentArrayList.add(payment);
                         creditCardResult.setPayments(paymentArrayList);
                     }
+                    creditCardResult.setFeesPaid(creditCardResult.getFeesPaid() + 1);
                     return  creditCardService.updateCreditCard(creditCardResult);
                 }
             ).subscribe();
@@ -96,7 +97,6 @@ public class CreditCardController {
                             creditCardResult.setConsumptions(consumptionArrayList);
                         }
                         creditCardResult.setAmountUsed(creditCardResult.getAmountUsed().add(consumptionRequest.getAmount()));
-                        creditCardResult.setFeesPaid(creditCardResult.getFeesPaid() + 1);
                         return creditCardService.updateCreditCard(creditCardResult);
                     }else{
                         return Mono.just("Exceed the limit");
