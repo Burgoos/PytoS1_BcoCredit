@@ -1,6 +1,8 @@
 package com.bootcamp.PytoS1_BcoCredit.controller;
 
 import com.bootcamp.PytoS1_BcoCredit.model.Credit;
+import com.bootcamp.PytoS1_BcoCredit.model.Payment;
+import com.bootcamp.PytoS1_BcoCredit.request.PaymentRequest;
 import com.bootcamp.PytoS1_BcoCredit.service.CreditServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
 
 @Slf4j
 @RestController
@@ -42,6 +46,32 @@ public class CreditController {
         return creditServiceImpl.updateCredit(credit);
     }
 
+    @PutMapping("/payment")
+    @ResponseStatus(HttpStatus.OK)
+    public  Mono<Credit> updatePayment(@RequestBody PaymentRequest paymentRequest){
+        try {
+            Mono<Credit> credit = creditServiceImpl.findCreditById(paymentRequest.getIdCredit());
+            credit.flatMap(
+                    creditResult -> {
+                        Payment payment = new Payment();
+                        payment.setAmount(paymentRequest.getAmount());
+                        payment.setDatePay(paymentRequest.getDatePay());
+                        if (creditResult.getPayments() != null){
+                            creditResult.getPayments().add(payment);
+                        }else {
+                            ArrayList<Payment> paymentArrayList = new ArrayList<>();
+                            paymentArrayList.add(payment);
+                            creditResult.setPayments(paymentArrayList);
+                        }
+                        return creditServiceImpl.updateCredit(creditResult);
+                    }
+            ).subscribe();
+            return credit;
+        }catch (Exception e){
+            log.info(e.getMessage());
+        }
+        return null;
+    }
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public  void  delete(@PathVariable("id") Integer id){
